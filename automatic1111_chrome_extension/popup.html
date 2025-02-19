@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Auto1111 Quick Set Extended</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 340px;
+      margin: 0;
+      padding: 8px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+    }
+
+    select,
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    /* Container for the two buttons */
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    /* Apply button fills available width */
+    .button-row button#applyBtn {
+      flex: 1;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    /* Reset button is square and fixed-size */
+    .button-row button#resetBtn {
+      width: 40px;
+      height: 40px;
+      font-size: 6px;
+      padding: 0;
+    }
+
+    hr {
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Img2Img Settings</h3>
+
+  <!-- Prompt -->
+  <label for="prompt">Prompt</label>
+  <textarea id="prompt"></textarea>
+
+  <!-- Negative Prompt Category Select -->
+  <label for="negPromptCategory">Negative Prompt Category</label>
+  <select id="negPromptCategory">
+    <option value="">-- Select a Category --</option>
+    <option value="universal">Universal</option>
+    <option value="anime">Anime</option>
+    <option value="backgrounds">Backgrounds</option>
+    <option value="realistic">Realistic</option>
+    <option value="face">Face</option>
+    <option value="hands">Hands</option>
+    <option value="eyes">Eyes</option>
+    <option value="portraits">Portraits</option>
+    <option value="nsfw">NSFW</option>
+  </select>
+
+  <!-- Negative Prompt -->
+  <label for="negativePrompt">Negative Prompt</label>
+  <textarea id="negativePrompt"></textarea>
+
+  <!-- Model -->
+  <label for="modelSelect">Model</label>
+  <select id="modelSelect">
+    <!-- Options populated in popup.js -->
+  </select>
+
+  <!-- Refiner Checkbox + Dropdown -->
+  <div class="checkbox-row">
+    <input type="checkbox" id="useRefiner">
+    <label for="useRefiner" style="font-weight: normal;">Refiner</label>
+  </div>
+  <select id="refinerSelect" style="display:none;">
+    <!-- Options populated in popup.js -->
+  </select>
+
+  <!-- Sampling Method -->
+  <label for="samplingMethod">Sampling Method</label>
+  <select id="samplingMethod">
+    <option>DPM++ 2M</option>
+    <option>DPM++ SDE</option>
+    <option>DPM++ 2M SDE</option>
+    <option>DPM++ 2M SDE Heun</option>
+    <option>DPM++ 2S a</option>
+    <option>DPM++ 3M SDE</option>
+    <option>Euler a</option>
+    <option>Euler</option>
+    <option>LMS</option>
+    <option>Heun</option>
+    <option>DPM2</option>
+    <option>DPM fast</option>
+    <option>DPM adaptive</option>
+    <option>Restart</option>
+    <option>DPM2 a</option>
+    <option>DDIM</option>
+    <option>DDIM CFG++</option>
+    <option>PMLS</option>
+    <option>UniPC</option>
+    <option>LCM</option>
+  </select>
+
+  <!-- Schedule Type -->
+  <label for="scheduleType">Schedule Type</label>
+  <select id="scheduleType">
+    <option>Automatic</option>
+    <option>Uniform</option>
+    <option>Karras</option>
+    <option>Exponential</option>
+    <option>Polyexponential</option>
+    <option>SGM Uniform</option>
+    <option>KL Optimal</option>
+    <option>Align Your Steps</option>
+    <option>Simple</option>
+    <option>Normal</option>
+    <option>DDIM</option>
+    <option>Beta</option>
+  </select>
+
+  <!-- Sampling Steps -->
+  <label for="stepsRange">Sampling Steps</label>
+  <div class="slider-row">
+    <input type="range" id="stepsRange" min="1" max="150" />
+    <input type="number" id="stepsNumber" min="1" max="150" style="width:60px;" />
+  </div>
+
+  <!-- Guidance Scale (CFG) -->
+  <label for="guidanceRange">Guidance Scale (CFG)</label>
+  <div class="slider-row">
+    <input type="range" id="guidanceRange" min="0" max="30" step="0.1" />
+    <input type="number" id="guidanceNumber" min="0" max="30" step="0.1" style="width:60px;" />
+  </div>
+
+  <!-- Denoising Strength -->
+  <label for="strengthRange">Denoising strength</label>
+  <div class="slider-row">
+    <input type="range" id="strengthRange" min="0" max="1" step="0.01" />
+    <input type="number" id="strengthNumber" min="0" max="1" step="0.01" style="width:60px;" />
+  </div>
+
+  <!-- Seed -->
+  <label for="seedRange">Seed</label>
+  <div class="slider-row">
+    <input type="range" id="seedRange" min="-1" max="999999999" />
+    <input type="number" id="seedNumber" min="-1" max="999999999" style="width:80px;" />
+  </div>
+
+  <!-- Extra Variation Checkbox -->
+  <div class="checkbox-row">
+    <input type="checkbox" id="useVariation">
+    <label for="useVariation" style="font-weight: normal;">Extra</label>
+  </div>
+
+  <!-- Variation seed container (hidden by default) -->
+  <div id="variationContainer" style="display: none;">
+    <label for="variationSeedNumber">Variation seed</label>
+    <div class="slider-row">
+      <input type="number" id="variationSeedNumber" min="-1" max="999999999" step="1" style="width:80px;" />
+      <button id="variationSeedRandom" title="Set variation seed to -1">Random</button>
+      <button id="variationSeedReuse" title="Reuse variation seed from last generation">Reuse</button>
+    </div>
+    <label for="variationStrengthRange">Variation strength</label>
+    <div class="slider-row">
+      <input type="range" id="variationStrengthRange" min="0" max="1" step="0.01" />
+      <input type="number" id="variationStrengthNumber" min="0" max="1" step="0.01" style="width:60px;" />
+    </div>
+  </div>
+
+  <!-- Aspect Ratio Dropdown -->
+  <label for="aspectRatioSelect">Aspect Ratio</label>
+  <select id="aspectRatioSelect">
+    <option value="Custom">Custom</option>
+    <option value="1:1">1:1</option>
+    <option value="16:9">16:9</option>
+    <option value="4:3">4:3</option>
+    <option value="3:2">3:2</option>
+    <option value="21:9">21:9</option>
+  </select>
+
+  <!-- Width & Height -->
+  <label for="widthRange">Width</label>
+  <div class="slider-row">
+    <input type="range" id="widthRange" min="64" max="2048" step="8" />
+    <input type="number" id="widthNumber" min="64" max="2048" step="8" style="width:80px;" />
+  </div>
+  <label for="heightRange">Height</label>
+  <div class="slider-row">
+    <input type="range" id="heightRange" min="64" max="2048" step="8" />
+    <input type="number" id="heightNumber" min="64" max="2048" step="8" style="width:80px;" />
+  </div>
+
+  <!-- Script Dropdown -->
+  <label for="scriptSelect">Script</label>
+  <select id="scriptSelect">
+    <option>None</option>
+    <option>img2img alternative test</option>
+    <option>Loopback</option>
+    <option>Outpainting mk2</option>
+    <option>Poor man's outpainting</option>
+    <option>Prompt matrix</option>
+    <option>Prompts from file or textbox</option>
+    <option>SD upscale</option>
+    <option>X/Y/Z plot</option>
+  </select>
+
+  <hr>
+
+  <!-- Button row: Apply and Reset -->
+  <div class="button-row">
+    <button id="applyBtn">Apply</button>
+    <button id="resetBtn" title="Reset to Defaults">Reset</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
